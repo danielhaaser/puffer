@@ -61,7 +61,7 @@ def test_api_post_request():
 
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
         mocked_session.post.assert_called_once_with(
-                url='https://api.bufferapp.com/1/hey', headers=headers, data='new=True')
+            url='https://api.bufferapp.com/1/hey', headers=headers, data='new=True')
 
 
 @raises(ValueError)
