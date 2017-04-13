@@ -16,20 +16,20 @@ api = API(client_id='client_id',
 
 # get all profiles
 profiles = Profiles(api=api)
-print profiles.all()
+print(profiles.all())
 
 # filter profiles using some criteria
 profile = Profiles(api=api).filter(service='twitter')[0]
-print profile
+print(profile)
 
 # get schedules of my twitter profile
 profile = Profiles(api=api).filter(service='twitter')[0]
-print profile.schedules
+print(profile.schedules)
 
 # update schedules times for my twitter profile
 profile = Profiles(api=api).filter(service='twitter')[0]
 
 profile.schedules = {
-  'days': ['tue', 'thu'],
-  'times': ['13:45']
+    'days': ['tue', 'thu'],
+    'times': ['13:45']
 }

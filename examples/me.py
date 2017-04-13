@@ -10,14 +10,14 @@ from puffer.models.user import User
 token = 'awesome_token'
 
 # instantiate the api object
-api = API(client_id='client_id', 
-          client_secret='client_secret', 
+api = API(client_id='client_id',
+          client_secret='client_secret',
           access_token=token)
 
 # instantiate an user object
 user = User(api=api)
 
 # now play!
-print Fore.YELLOW + '<< Just the basic user obj as dict >>\n' + Fore.RESET, user
-print Fore.YELLOW + '<< User\'s ID >>\n' + Fore.RESET, user.id
-print Fore.YELLOW + '<< User\'s timezone >>\n' + Fore.RESET, user.timezone
+print(Fore.YELLOW + '<< Just the basic user obj as dict >>\n' + Fore.RESET, user)
+print(Fore.YELLOW + '<< User\'s ID >>\n' + Fore.RESET, user.id)
+print(Fore.YELLOW + '<< User\'s timezone >>\n' + Fore.RESET, user.timezone)
