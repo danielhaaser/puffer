@@ -8,7 +8,7 @@ from puffer.response import ResponseObject
 
 BASE_URL = 'https://api.bufferapp.com/1/%s'
 PATHS = {
-        'INFO': 'info/configuration.json'
+    'INFO': 'info/configuration.json'
 }
 
 AUTHORIZE_URL = 'https://bufferapp.com/oauth2/authorize'

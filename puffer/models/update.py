@@ -1,97 +1,98 @@
 from puffer.response import ResponseObject
 
 PATHS = {
-  'GET_UPDATE': 'updates/%s.json',
-  'GET_INTERACTIONS': 'updates/%s/interactions.json',
-  'EDIT': 'updates/%s/update.json',
-  'PUBLISH': 'updates/%s/share.json',
-  'DELETE': 'updates/%s/destroy.json',
-  'MOVE_TO_TOP': 'updates/%s/move_to_top.json',
+    'GET_UPDATE': 'updates/%s.json',
+    'GET_INTERACTIONS': 'updates/%s/interactions.json',
+    'EDIT': 'updates/%s/update.json',
+    'PUBLISH': 'updates/%s/share.json',
+    'DELETE': 'updates/%s/destroy.json',
+    'MOVE_TO_TOP': 'updates/%s/move_to_top.json',
 }
 
+
 class Update(ResponseObject):
-  '''
-    An update represents a single post to a single social media account. An
-    update can also include media attachments such as pictures and links.
-  '''
-
-  def __init__(self, api, id=None, raw_response=None):
-    if id and not raw_response:
-      raw_response = api.get(url=PATHS['GET_UPDATE'] % id)
-
-    super(Update, self).__init__(raw_response)
-
-    self.api = api
-    self.__interactions = []
-
-  @property
-  def interactions(self):
     '''
-      Returns the detailed information on individual interactions with the social
-      media update such as favorites, retweets and likes.
+        An update represents a single post to a single social media account. An
+        update can also include media attachments such as pictures and links.
     '''
 
-    interactions = []
-    url = PATHS['GET_INTERACTIONS'] % self.id
+    def __init__(self, api, id=None, raw_response=None):
+        if id and not raw_response:
+            raw_response = api.get(url=PATHS['GET_UPDATE'] % id)
 
-    response = self.api.get(url=url)
-    for interaction in response['interactions']:
-      interactions.append(ResponseObject(interaction))
+        super(Update, self).__init__(raw_response)
 
-    self.__interactions = interactions
+        self.api = api
+        self.__interactions = []
 
-    return self.__interactions
+    @property
+    def interactions(self):
+        '''
+            Returns the detailed information on individual interactions with the social
+            media update such as favorites, retweets and likes.
+        '''
 
-  def edit(self, text, media=None, utc=None, now=None):
-    '''
-      Edit an existing, individual status update.
-    '''
+        interactions = []
+        url = PATHS['GET_INTERACTIONS'] % self.id
 
-    url = PATHS['EDIT'] % self.id
+        response = self.api.get(url=url)
+        for interaction in response['interactions']:
+            interactions.append(ResponseObject(interaction))
 
-    post_data = "text=%s&" % text
+        self.__interactions = interactions
 
-    if now:
-      post_data += "now=%s&" % now
+        return self.__interactions
 
-    if utc:
-      post_data += "utc=%s&" % utc
+    def edit(self, text, media=None, utc=None, now=None):
+        '''
+            Edit an existing, individual status update.
+        '''
 
-    if media:
-      media_format = "media[%s]=%s&"
+        url = PATHS['EDIT'] % self.id
 
-      for media_type, media_item in media.items():
-        post_data += media_format % (media_type, media_item)
+        post_data = "text=%s&" % text
 
-    response = self.api.post(url=url, data=post_data)
+        if now:
+            post_data += "now=%s&" % now
 
-    return Update(api=self.api, raw_response=response['update'])
+        if utc:
+            post_data += "utc=%s&" % utc
 
-  def publish(self):
-    '''
-      Immediately shares a single pending update and recalculates times for
-      updates remaining in the queue.
-    '''
+        if media:
+            media_format = "media[%s]=%s&"
 
-    url = PATHS['PUBLISH'] % self.id
-    return self.api.post(url=url)
+            for media_type, media_item in media.items():
+                post_data += media_format % (media_type, media_item)
 
-  def delete(self):
-    '''
-      Permanently delete an existing status update.
-    '''
+        response = self.api.post(url=url, data=post_data)
 
-    url = PATHS['DELETE'] % self.id
-    return self.api.post(url=url)
+        return Update(api=self.api, raw_response=response['update'])
 
-  def move_to_top(self):
-    '''
-      Move an existing status update to the top of the queue and recalculate
-      times for all updates in the queue. Returns the update with its new
-      posting time.
-    '''
+    def publish(self):
+        '''
+            Immediately shares a single pending update and recalculates times for
+            updates remaining in the queue.
+        '''
 
-    url = PATHS['MOVE_TO_TOP'] % self.id
+        url = PATHS['PUBLISH'] % self.id
+        return self.api.post(url=url)
 
-    response = self.api.post(url=url)
-    return Update(api=self.api, raw_response=response)
+    def delete(self):
+        '''
+            Permanently delete an existing status update.
+        '''
+
+        url = PATHS['DELETE'] % self.id
+        return self.api.post(url=url)
+
+    def move_to_top(self):
+        '''
+            Move an existing status update to the top of the queue and recalculate
+            times for all updates in the queue. Returns the update with its new
+            posting time.
+        '''
+
+        url = PATHS['MOVE_TO_TOP'] % self.id
+
+        response = self.api.post(url=url)
+        return Update(api=self.api, raw_response=response)

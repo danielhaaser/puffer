@@ -8,6 +8,7 @@ PATHS = {
     'CREATE': 'updates/create.json',
 }
 
+
 class Updates(list):
     """
         Implenents all the profiles+updates logic.
@@ -98,7 +99,7 @@ class Updates(list):
 
         return self.api.post(url=url, data=post_data)
 
-    #TODO: Multiple profile posting
+    # TODO: Multiple profile posting
     def new(self, text, shorten=None, now=None, top=None, media=None, when=None):
         """
             Create one or more new status updates.

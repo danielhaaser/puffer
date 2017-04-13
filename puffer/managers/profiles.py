@@ -1,40 +1,41 @@
 from puffer.models.profile import PATHS, Profile
 
+
 class Profiles(list):
-  '''
-    Manage profiles
-      + all     -> get all the profiles from buffer
-      + filter  -> wrapper for list filtering
-  '''
-
-  def __init__(self, api, *args, **kwargs):
-    super(Profiles, self).__init__(*args, **kwargs)
-
-    self.api = api
-
-  def all(self):
     '''
-      Get all social newtworks profiles
+        Manage profiles
+            + all     -> get all the profiles from buffer
+            + filter  -> wrapper for list filtering
     '''
 
-    response = self.api.get(url=PATHS['GET_PROFILES'])
+    def __init__(self, api, *args, **kwargs):
+        super(Profiles, self).__init__(*args, **kwargs)
 
-    for raw_profile in response:
-      self.append(Profile(self.api, raw_profile))
+        self.api = api
 
-    return self
+    def all(self):
+        '''
+            Get all social newtworks profiles
+        '''
 
-  def filter(self, **kwargs):
-    '''
-      Based on some criteria, filter the profiles and return a new Profiles
-      Manager containing only the chosen items
+        response = self.api.get(url=PATHS['GET_PROFILES'])
 
-      If the manager doen't have any items, get all the profiles from Buffer
-    '''
+        for raw_profile in response:
+            self.append(Profile(self.api, raw_profile))
 
-    if not len(self):
-      self.all()
+        return self
 
-    new_list = filter(lambda item: [True for arg in kwargs if item[arg] == kwargs[arg]] != [], self)
+    def filter(self, **kwargs):
+        '''
+            Based on some criteria, filter the profiles and return a new Profiles
+            Manager containing only the chosen items
 
-    return Profiles(self.api, new_list)
+            If the manager doen't have any items, get all the profiles from Buffer
+        '''
+
+        if not len(self):
+            self.all()
+
+        new_list = filter(lambda item: [True for arg in kwargs if item[arg] == kwargs[arg]] != [], self)
+
+        return Profiles(self.api, new_list)
